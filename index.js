@@ -17,7 +17,7 @@ app.get('/file', (req, res) => {
   }
 });
 
-app.get('/file/getAfile.js', (req, res) => {
+app.get('/file/getAfile', (req, res) => {
   try {
     const content = getAFile(req.params.fileName);
     res.json({ fileContent: content });
@@ -55,7 +55,7 @@ app.delete('/file/deleteAfile', (req, res) => {
   }
 });
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
