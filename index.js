@@ -17,7 +17,7 @@ app.get('/file', (req, res) => {
   }
 });
 
-app.get('/file/:fileName', (req, res) => {
+app.get('/file/getAfile.js', (req, res) => {
   try {
     const content = getAFile(req.params.fileName);
     res.json({ fileContent: content });
@@ -26,7 +26,7 @@ app.get('/file/:fileName', (req, res) => {
   }
 });
 
-app.post('/file/create', (req, res) => {
+app.post('/file/createAfile', (req, res) => {
   const { fileName, fileData } = req.body;
   try {
     createAFile(fileName, fileData);
@@ -36,7 +36,7 @@ app.post('/file/create', (req, res) => {
   }
 });
 
-app.put('/file/:fileName', (req, res) => {
+app.put('/file/updtatedAfile', (req, res) => {
   const { updatedFileName, newFileData } = req.body;
   try {
     updateAFile(req.params.fileName, updatedFileName, newFileData);
@@ -46,7 +46,7 @@ app.put('/file/:fileName', (req, res) => {
   }
 });
 
-app.delete('/file/:fileName', (req, res) => {
+app.delete('/file/deleteAfile', (req, res) => {
   try {
     deleteAFile(req.params.fileName);
     res.json({ message: 'File deleted successfully' });
