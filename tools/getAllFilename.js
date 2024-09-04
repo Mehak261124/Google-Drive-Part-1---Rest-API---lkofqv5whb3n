@@ -1,5 +1,9 @@
-const getAllFiles = () => {
+const fs = require('fs');
+const path = require('path');
 
+const getAllFileNames = () => {
+  const directoryPath = path.join(__dirname, '../root');
+  return fs.readdirSync(directoryPath);
 };
 
-export default getAllFiles;
+module.exports = getAllFileNames;
