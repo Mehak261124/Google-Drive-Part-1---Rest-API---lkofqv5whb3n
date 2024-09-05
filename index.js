@@ -17,7 +17,7 @@ app.get('/file', (req, res) => {
   }
 });
 
-app.get('/file/getAfile', (req, res) => {
+app.get('/file/:fileName', (req, res) => {
   try {
     const content = getAFile(req.params.fileName);
     res.json({ fileContent: content });
@@ -26,7 +26,7 @@ app.get('/file/getAfile', (req, res) => {
   }
 });
 
-app.post('/file/createAfile', (req, res) => {
+app.post('/file/create', (req, res) => {
   const { fileName, fileData } = req.body;
   try {
     createAFile(fileName, fileData);
