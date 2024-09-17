@@ -1,16 +1,16 @@
-const fs = require('fs');
-const path = require('path');
-
-const updateAFile = (oldFileName, updatedFileName, newFileData) => {
-  const oldFilePath = path.join(__dirname, '../root', oldFileName);
-  const newFilePath = path.join(__dirname, '../root', updatedFileName);
-
-  if (fs.existsSync(oldFilePath)) {
-    fs.renameSync(oldFilePath, newFilePath);
-    fs.writeFileSync(newFilePath, newFileData, 'utf8');
-  } else {
-    throw new Error('File does not exist');
+import fs from "fs";
+const updateAfile = (oldFileName, updatedFileName, newFileData) => {
+  const allFiles = fs.readdirSync("./root");
+  const fileLocation = `./root/${oldFileName}`;
+  if (allFiles.includes(updatedFileName)) {
+    return "file already exist";
   }
+  if (fs.existsSync(fileLocation)) {
+    fs.unlinkSync(fileLocation);
+    fs.writeFileSync(`./root/${updatedFileName}`, newFileData);
+    return "File updated successfully";
+  }
+  return "The file you want to update does not exists";
 };
 
-module.exports = updateAFile;
+export default updateAfile;
