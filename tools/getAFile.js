@@ -1,13 +1,11 @@
-const fs = require('fs');
-const path = require('path');
-
+import fs from "fs";
 const getAFile = (fileName) => {
-  const filePath = path.join(__dirname, '../root', fileName);
-  if (fs.existsSync(filePath)) {
-    return fs.readFileSync(filePath, 'utf8');
-  } else {
-    throw new Error('File does not exist');
+  const allFiles = fs.readdirSync("./root");
+  if (allFiles.includes(fileName)) {
+    const data = fs.readFileSync(`./root/${fileName}`, "utf-8");
+    return data;
   }
+  return false;
 };
 
-module.exports = getAFile;
+export default getAFile;
