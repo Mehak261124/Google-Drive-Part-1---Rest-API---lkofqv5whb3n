@@ -1,13 +1,11 @@
-const fs = require('fs');
-const path = require('path');
-
+import fs from "fs";
 const deleteAFile = (fileName) => {
-  const filePath = path.join(__dirname, '../root', fileName);
-  if (fs.existsSync(filePath)) {
-    fs.unlinkSync(filePath);
-  } else {
-    throw new Error('File does not exist');
+  const fileLocation = `./root/${fileName}`;
+  if (fs.existsSync(fileLocation)) {
+    fs.unlinkSync(fileLocation);
+    return true;
   }
+  return false;
 };
 
-module.exports = deleteAFile;
+export default deleteAFile;
