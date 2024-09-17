@@ -1,63 +1,76 @@
-const express = require('express');
-const createAFile = require('./tools/createAfile');
-const deleteAFile = require('./tools/deleteAFile');
-const getAFile = require('./tools/getAFile');
-const getAllFileNames = require('./tools/getAllFileName');
-const updateAFile = require('./tools/updateAfile');
+import express from "express";
+import createAfile from "./tools/createAfile.js";
+import getAFile from "./tools/getAFile.js";
+import getAllFiles from "./tools/getAllFilename.js";
+import updateAfile from "./tools/updateAfile.js";
+import deleteAFile from "./tools/deleteAFile.js";
 const app = express();
+const port = 8000;
 
 app.use(express.json());
 
-app.get('/file', (req, res) => {
-  try {
-    const files = getAllFileNames();
-    res.json({ files });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
-
-app.get('/file/:fileName', (req, res) => {
-  try {
-    const content = getAFile(req.params.fileName);
-    res.json({ fileContent: content });
-  } catch (err) {
-    res.status(404).json({ message: err.message });
-  }
-});
-
-app.post('/file/create', (req, res) => {
+app.post("/file/create", (req, res) => {
   const { fileName, fileData } = req.body;
-  try {
-    createAFile(fileName, fileData);
-    res.json({ message: 'File created successfully' });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
+  createAfile(fileName, fileData);
+  res.send({
+    message: "File created successfully",
+  });
 });
 
-app.put('/file/updtatedAfile', (req, res) => {
+app.delete("/file/:filename", (req, res) => {
+  const filename = req.params.filename;
+  if (deleteAFile(filename)) {
+    res.send({
+      message: "File Deleted Successfully",
+    });
+  }
+  res.send({
+    message: "Provide a valid file name",
+  });
+});
+
+app.get("/file", (req, res) => {
+  const allFiles = getAllFiles();
+  res.send({
+    files: allFiles,
+  });
+});
+
+app.get("/file/:fileName", (req, res) => {
+  const fileName = req.params.fileName;
+  const ans = getAFile(fileName);
+  if (ans != false) {
+    res.send({
+      fileContent: ans,
+      message: "success",
+    });
+  }
+  res.send({
+    message: "File does not exist",
+  });
+});
+
+app.put("/file/:filename", (req, res) => {
+  const fileName = req.params.filename;
   const { updatedFileName, newFileData } = req.body;
-  try {
-    updateAFile(req.params.fileName, updatedFileName, newFileData);
-    res.json({ message: 'File updated successfully' });
-  } catch (err) {
-    res.status(404).json({ message: err.message });
+  if ((updatedFileName || newFileData) && fileName) {
+    const message = updateAfile(fileName, updatedFileName, newFileData);
+    if (message == "File updated successfully") {
+      res.send({
+        message: message,
+      });
+    }
+    res.send({
+      message: message,
+    });
+  } else {
+    res.send({
+      message: "Provide all data",
+    });
   }
 });
-
-app.delete('/file/deleteAfile', (req, res) => {
-  try {
-    deleteAFile(req.params.fileName);
-    res.json({ message: 'File deleted successfully' });
-  } catch (err) {
-    res.status(404).json({ message: err.message });
-  }
-});
-
-const port = process.env.PORT || 3001;
 app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+  console.log(`App listening at http://localhost:${port}`);
 });
 
-module.exports = app;
+export default app;
